@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Search builds, games, and FAQs across Gaming Budget Hub.">
+    <meta property="og:title" content="Gaming Budget Hub">
+    <meta property="og:description" content="Level up your setup without breaking the bank.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1542751371-adc38448a05e">
+    <title>Search | Gaming Budget Hub</title>
+    <style>
+        html { scroll-behavior: smooth; }
+        :root { --primary-neon: #00ffcc; --bg-deep: #0b0e14; --card-bg: #161b22; --highlight: #ffdb4d; }
+        body.light-mode { --bg-deep: #f0f2f5; --card-bg: #ffffff; color: #1c1e21; }
+        body.light-mode .nav a { color: #333; }
+        body.light-mode .result-card { background: #fff; border-color: #ddd; }
+        body.light-mode .result-desc { color: #555; }
+        body.light-mode .filter-btn { background: #eee; color: #333; border-color: #ccc; }
+        body.light-mode .filter-btn.active { background: var(--primary-neon); color: #0b0e14; }
+        body.light-mode #searchInput { background: #fff; color: #1c1e21; border-color: #ccc; }
+
+        * { box-sizing: border-box; }
+        body { background-color: var(--bg-deep); color: #e6edf3; font-family: 'Segoe UI', sans-serif; margin: 0; transition: 0.3s; }
+
+        .header { background: rgba(13, 17, 23, 0.95); border-bottom: 2px solid var(--primary-neon); display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; position: sticky; top: 0; z-index: 2000; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary-neon); text-transform: uppercase; }
+        .nav { display: flex; align-items: center; }
+        .nav a { color: #fff; text-decoration: none; margin-left: 20px; font-weight: 500; transition: 0.3s; }
+        .nav a:hover { color: var(--primary-neon); }
+        .nav a.active { color: var(--primary-neon); border-bottom: 2px solid var(--primary-neon); padding-bottom: 5px; }
+        .mobile-menu { display: none; font-size: 2rem; color: var(--primary-neon); cursor: pointer; }
+
+        @media (max-width: 768px) {
+            .mobile-menu { display: block; }
+            .nav { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background: var(--bg-deep); border-bottom: 2px solid var(--primary-neon); padding: 20px 0; z-index: 999; }
+            .nav.active { display: flex !important; }
+            .nav a { margin: 10px 0; text-align: center; }
+        }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px 80px; }
+
+        .page-title { text-align: center; margin-bottom: 30px; }
+        .page-title h1 { font-size: 2rem; font-weight: 800; color: #fff; }
+        .page-title h1 span { color: var(--primary-neon); }
+        .page-title p { color: #8b949e; margin-top: 8px; font-size: 0.92rem; }
+
+        .search-box { position: relative; margin-bottom: 20px; }
+        #searchInput {
+            width: 100%;
+            padding: 16px 48px 16px 20px;
+            background: var(--card-bg);
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1.05rem;
+            font-family: inherit;
+            outline: none;
+            transition: 0.2s;
+        }
+        #searchInput:focus { border-color: var(--primary-neon); box-shadow: 0 0 12px rgba(0,255,204,0.15); }
+        .search-icon { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); color: #8b949e; font-size: 1.2rem; pointer-events: none; }
+
+        .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+        .filter-btn {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            color: #8b949e;
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.82rem;
+            font-family: inherit;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .filter-btn:hover { border-color: var(--primary-neon); color: var(--primary-neon); }
+        .filter-btn.active { background: var(--primary-neon); color: #0b0e14; border-color: var(--primary-neon); font-weight: 700; }
+
+        .result-count { color: #8b949e; font-size: 0.85rem; margin-bottom: 14px; }
+
+        .results { display: flex; flex-direction: column; gap: 10px; }
+        .result-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            background: var(--card-bg);
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 16px 20px;
+            text-decoration: none;
+            color: inherit;
+            transition: 0.2s;
+        }
+        .result-card:hover { border-color: var(--primary-neon); transform: translateY(-2px); box-shadow: 0 0 12px rgba(0,255,204,0.12); }
+        .result-left { flex: 1; min-width: 0; }
+        .result-tag {
+            display: inline-block;
+            font-size: 0.68rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 2px 9px;
+            border-radius: 12px;
+            margin-bottom: 6px;
+        }
+        .tag-build  { background: rgba(0,255,204,0.12); color: var(--primary-neon); border: 1px solid var(--primary-neon); }
+        .tag-game   { background: rgba(157,123,255,0.12); color: #bb99ff; border: 1px solid #9966ff; }
+        .tag-faq    { background: rgba(255,219,77,0.12); color: var(--highlight); border: 1px solid var(--highlight); }
+        .tag-page   { background: rgba(54,162,235,0.12); color: #36a2eb; border: 1px solid #36a2eb; }
+
+        .result-title { font-weight: 700; font-size: 0.98rem; color: #fff; margin-bottom: 3px; }
+        .result-desc { font-size: 0.85rem; color: #8b949e; line-height: 1.5; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .result-arrow { color: var(--primary-neon); font-size: 1.3rem; flex-shrink: 0; }
+        mark { background: rgba(0,255,204,0.35); color: inherit; border-radius: 3px; padding: 0 2px; }
+
+        .no-results { text-align: center; color: #8b949e; padding: 50px 20px; }
+        .no-results .emoji { font-size: 2.5rem; margin-bottom: 10px; }
+
+        .theme-btn { background: none; border: 1px solid var(--primary-neon); color: var(--primary-neon); cursor: pointer; padding: 5px 12px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="logo">Gaming Budget Hub</div>
+    <div class="mobile-menu" id="mobile-menu">☰</div>
+    <nav class="nav" id="nav-menu">
+        <a href="index.html">🏠 Home</a>
+        <a href="builds.html">🖥️ PC Builds</a>
+        <a href="fps-guides.html">📊 FPS Guides</a>
+        <a href="fps-counter.html">⚡ FPS Counter</a>
+        <a href="quiz.html">🎯 Build Quiz</a>
+        <a href="search.html" class="active">🔍 Search</a>
+        <a href="faq.html">❓ FAQ</a>
+        <a href="upgrade-guide.html">📈 Upgrade Guide</a>
+        <a href="contact.html">📩 Contact Us</a>
+    </nav>
+    <button id="theme-toggle" class="theme-btn">🌙</button>
+</header>
+
+<main class="container">
+    <div class="page-title">
+        <h1>🔍 Search <span>Gaming Budget Hub</span></h1>
+        <p>Find builds, games, FAQs, and pages across the whole site</p>
+    </div>
+
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search for a build, game, or question..." autofocus>
+        <span class="search-icon">🔍</span>
+    </div>
+
+    <div class="filters" id="filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="build">🖥️ Builds</button>
+        <button class="filter-btn" data-filter="game">🎮 Games</button>
+        <button class="filter-btn" data-filter="faq">❓ FAQ</button>
+        <button class="filter-btn" data-filter="page">📄 Pages</button>
+    </div>
+
+    <div class="result-count" id="resultCount"></div>
+    <div class="results" id="results"></div>
+    <div class="no-results" id="noResults" style="display:none;">
+        <div class="emoji">🕵️</div>
+        <div>No results found. Try a different search term.</div>
+    </div>
+</main>
+
+<footer style="background: #0d1117; border-top: 1px solid #30363d; padding: 40px 20px; text-align: center; margin-top: 50px;">
+    <p style="color: var(--primary-neon); font-weight: 600;">GAMING BUDGET HUB</p>
+    <p style="color: #8b949e; font-size: 0.9rem;">Your guide to budget gaming in Pakistan.</p>
+    <div style="margin-top: 15px;">
+        <a href="#" style="color: #fff; margin: 0 10px; text-decoration: none;">Discord</a>
+        <a href="#" style="color: #fff; margin: 0 10px; text-decoration: none;">YouTube</a>
+        <a href="#" style="color: #fff; margin: 0 10px; text-decoration: none;">Instagram</a>
+    </div>
+    <p style="color: #484f58; font-size: 0.8rem; margin-top: 20px;">&copy; 2026 Gaming Budget Hub. All rights reserved.</p>
+</footer>
+
+<script src="main.js"></script>
+<script>
+// ── SEARCH INDEX ──
+const searchIndex = [
+    // Builds
+    { type: 'build', title: 'Ultra Budget Starter — PKR 29,000', desc: 'i5-2400, H61 OEM, Intel HD/GT 610, 8GB DDR3, 128GB SSD + 500GB HDD. Great for esports lite & casual gaming.', url: 'builds.html' },
+    { type: 'build', title: 'The E-Sports Entry — PKR 44,000', desc: 'i5-3470, B75 board, GT 1030 2GB GDDR5, 8GB DDR3, 256GB SSD. Smooth esports at 1080p low-medium.', url: 'builds.html' },
+    { type: 'build', title: '1080p Budget Gamer — PKR 60,000', desc: 'i5-4570, H81 chipset, RX 460 2GB, 16GB DDR3, 256GB SSD + 500GB HDD. 144 FPS in Valorant.', url: 'builds.html' },
+    { type: 'build', title: 'The Sweet Spot Beast — PKR 72,000', desc: 'Ryzen 5 2600, A320M board, RX 580 8GB, 8GB DDR4, 256GB NVMe SSD. Most popular — best value for 1080p gaming.', url: 'builds.html' },
+    { type: 'build', title: 'Pro Performance Build — PKR 82,500', desc: 'Ryzen 5 3600, B350M board, GTX 1650 Super 4GB, 16GB DDR4. High FPS, future-proof for 1–2 years.', url: 'builds.html' },
+
+    // Games
+    { type: 'game', title: 'Valorant', desc: 'Check estimated FPS across every budget build.', url: 'fps-counter.html' },
+    { type: 'game', title: 'CS2 (Counter-Strike 2)', desc: 'Check estimated FPS across every budget build.', url: 'fps-counter.html' },
+    { type: 'game', title: 'PUBG', desc: 'One of the most demanding games on the list — needs at least the 60k build for playable FPS.', url: 'fps-counter.html' },
+    { type: 'game', title: 'Fortnite', desc: 'Check estimated FPS across every budget build.', url: 'fps-counter.html' },
+    { type: 'game', title: 'Free Fire', desc: 'Runs well even on the cheapest builds.', url: 'fps-counter.html' },
+    { type: 'game', title: 'Call of Duty: Warzone', desc: 'One of the heaviest titles — best on higher-tier builds.', url: 'fps-counter.html' },
+    { type: 'game', title: 'Rocket League', desc: 'Check estimated FPS across every budget build.', url: 'fps-counter.html' },
+    { type: 'game', title: 'EA Sports FC 24', desc: 'Check estimated FPS across every budget build.', url: 'fps-counter.html' },
+    { type: 'game', title: 'GTA 5', desc: 'Check estimated FPS across every budget build.', url: 'fps-counter.html' },
+    { type: 'game', title: 'Minecraft', desc: 'Very light — runs at high FPS even on entry-level builds.', url: 'fps-counter.html' },
+    { type: 'game', title: 'Roblox', desc: 'Very light — runs at high FPS even on entry-level builds.', url: 'fps-counter.html' },
+    { type: 'game', title: 'Dota 2', desc: 'Check estimated FPS across every budget build.', url: 'fps-counter.html' },
+    { type: 'game', title: 'Full FPS comparison table', desc: 'See every game and every build side by side, plus an interactive performance chart.', url: 'fps-guides.html' },
+
+    // FAQ
+    { type: 'faq', title: 'Is it safe to buy used RAM from OLX?', desc: 'RAM is one of the safest used parts to buy — run MemTest86 for one pass after buying.', url: 'faq.html' },
+    { type: 'faq', title: 'Should I buy a used GPU? What should I check?', desc: 'Run FurMark for 15 minutes — temps should stay under 85°C. Be careful with mined RX 580s/570s.', url: 'faq.html' },
+    { type: 'faq', title: 'Should I ever buy a used PSU?', desc: 'No — never buy a used PSU. Always buy new, even if it means cutting budget elsewhere.', url: 'faq.html' },
+    { type: 'faq', title: 'How do I check if a used hard drive or SSD is healthy?', desc: 'Use CrystalDiskInfo — should show "Good" status and reasonable power-on hours / bytes written.', url: 'faq.html' },
+    { type: 'faq', title: 'What PSU wattage do I need for RX 580?', desc: 'At least a 500W 80+ Bronze PSU — the card draws up to 185W under load.', url: 'faq.html' },
+    { type: 'faq', title: 'What PSU do I need for GTX 1650 Super?', desc: 'A 400W–450W 80+ Bronze PSU is enough — it\'s a very power-efficient card.', url: 'faq.html' },
+    { type: 'faq', title: 'Can I upgrade my PC later after starting on a low budget?', desc: 'Yes — Ryzen builds (A320M, B350M) are much easier to upgrade than older Intel LGA1150 boards.', url: 'faq.html' },
+    { type: 'faq', title: 'Can I add more RAM later?', desc: 'Yes — just match speed and type. Mixing speeds runs both sticks at the slower speed.', url: 'faq.html' },
+    { type: 'faq', title: 'Will my GT 1030 bottleneck my i5-3470?', desc: 'At that budget the GPU is almost always the bottleneck, not the CPU.', url: 'faq.html' },
+    { type: 'faq', title: 'Can I run Valorant on a budget build?', desc: 'Yes — Valorant is very well optimized even on entry-level builds.', url: 'faq.html' },
+    { type: 'faq', title: 'Can I run PUBG on a budget PC?', desc: 'PUBG is one of the most demanding games on this list — aim higher-tier for a smooth experience.', url: 'faq.html' },
+
+    // Pages
+    { type: 'page', title: 'Home', desc: 'Featured build, the build quiz, and the used parts buyer\'s guide.', url: 'index.html' },
+    { type: 'page', title: 'PC Builds', desc: 'Detailed price guide for every budget tier, with buy links per part.', url: 'builds.html' },
+    { type: 'page', title: 'FPS Guides', desc: 'Full FPS comparison table and interactive chart across every build and game.', url: 'fps-guides.html' },
+    { type: 'page', title: 'FPS Counter', desc: 'Live FPS estimator — pick a budget and a game to see expected performance.', url: 'fps-counter.html' },
+    { type: 'page', title: 'Build Quiz', desc: 'Answer 3 quick questions and get your perfect budget PC build recommended.', url: 'quiz.html' },
+    { type: 'page', title: 'FAQ', desc: 'Answers on buying used parts, PSU wattage, upgrades, and gaming performance.', url: 'faq.html' },
+    { type: 'page', title: 'Upgrade Path Guide', desc: 'Step-by-step guide on what to upgrade first — and in what order — as your budget grows.', url: 'upgrade-guide.html' },
+    { type: 'page', title: 'Contact Us', desc: 'Send a message if you need help picking or building your setup.', url: 'contact.html' },
+];
+
+const tagLabel = { build: 'Build', game: 'Game', faq: 'FAQ', page: 'Page' };
+
+let activeFilter = 'all';
+const input = document.getElementById('searchInput');
+const resultsEl = document.getElementById('results');
+const noResultsEl = document.getElementById('noResults');
+const countEl = document.getElementById('resultCount');
+
+function highlight(text, query) {
+    if (!query) return text;
+    const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return text.replace(new RegExp(escaped, 'gi'), (m) => `<mark>${m}</mark>`);
+}
+
+function render() {
+    const query = input.value.trim().toLowerCase();
+
+    let matches = searchIndex.filter(item => {
+        if (activeFilter !== 'all' && item.type !== activeFilter) return false;
+        if (!query) return true;
+        return item.title.toLowerCase().includes(query) || item.desc.toLowerCase().includes(query);
+    });
+
+    countEl.textContent = query || activeFilter !== 'all'
+        ? `${matches.length} result${matches.length === 1 ? '' : 's'}`
+        : '';
+
+    if (matches.length === 0) {
+        resultsEl.innerHTML = '';
+        noResultsEl.style.display = 'block';
+        return;
+    }
+    noResultsEl.style.display = 'none';
+
+    resultsEl.innerHTML = matches.map(item => `
+        <a class="result-card" href="${item.url}">
+            <div class="result-left">
+                <span class="result-tag tag-${item.type}">${tagLabel[item.type]}</span>
+                <div class="result-title">${highlight(item.title, query)}</div>
+                <div class="result-desc">${highlight(item.desc, query)}</div>
+            </div>
+            <span class="result-arrow">→</span>
+        </a>
+    `).join('');
+}
+
+input.addEventListener('input', render);
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilter = btn.dataset.filter;
+        render();
+    });
+});
+
+render();
+</script>
+</body>
+</html>

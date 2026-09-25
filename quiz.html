@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build Recommender Quiz | Gaming Budget Hub</title>
+    <meta name="description" content="Answer 3 questions and get your perfect budget PC build for Pakistan.">
+    <style>
+        html { scroll-behavior: smooth; }
+        :root { --primary-neon: #00ffcc; --bg-deep: #0b0e14; --card-bg: #161b22; --highlight: #ffdb4d; --red: #ff4d6d; --purple: #9d7bff; }
+        body.light-mode { --bg-deep: #f0f2f5; --card-bg: #ffffff; color: #333; }
+        body.light-mode .nav a { color: #333; }
+        body.light-mode .option-btn { background: #fff; border-color: #ddd; color: #333; }
+        body.light-mode .option-btn:hover { border-color: var(--primary-neon); color: #0b0e14; }
+        body.light-mode .part-row { background: #f8f9fa; }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg-deep); color: #e6edf3; font-family: 'Segoe UI', sans-serif; min-height: 100vh; transition: 0.3s; }
+
+        /* Grid background */
+        body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(0,255,204,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,204,0.03) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; z-index: 0; }
+
+        .header { background: rgba(13, 17, 23, 0.97); border-bottom: 2px solid var(--primary-neon); display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; position: sticky; top: 0; z-index: 2000; backdrop-filter: blur(10px); }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary-neon); text-transform: uppercase; }
+        .nav { display: flex; align-items: center; }
+        .nav a { color: #fff; text-decoration: none; margin-left: 20px; font-weight: 500; transition: 0.3s; }
+        .nav a:hover { color: var(--primary-neon); }
+        .nav a.active { color: var(--primary-neon); border-bottom: 2px solid var(--primary-neon); padding-bottom: 5px; }
+        .theme-btn { background: none; border: 1px solid var(--primary-neon); color: var(--primary-neon); cursor: pointer; padding: 5px 12px; border-radius: 5px; }
+        .mobile-menu { display: none; font-size: 1.8rem; color: var(--primary-neon); cursor: pointer; }
+
+        @media (max-width: 768px) {
+            .mobile-menu { display: block; }
+            .nav { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background: var(--bg-deep); border-bottom: 2px solid var(--primary-neon); padding: 20px 0; }
+            .nav.active { display: flex !important; }
+            .nav a { margin: 12px 0; text-align: center; }
+        }
+
+        /* ── MAIN ── */
+        main { max-width: 680px; margin: 0 auto; padding: 40px 20px 80px; position: relative; z-index: 1; }
+
+        .page-title { text-align: center; margin-bottom: 36px; }
+        .page-title h1 { font-size: 2rem; font-weight: 800; color: #fff; }
+        .page-title h1 span { color: var(--primary-neon); }
+        .page-title p { color: #8b949e; margin-top: 8px; font-size: 0.92rem; }
+
+        /* ── PROGRESS BAR ── */
+        .progress-wrap { margin-bottom: 30px; }
+        .progress-labels { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.78rem; color: #8b949e; }
+        .progress-track { height: 4px; background: #1e2633; border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary-neon); border-radius: 4px; transition: width 0.4s ease; box-shadow: 0 0 8px rgba(0,255,204,0.5); }
+
+        /* ── QUIZ CARD ── */
+        .quiz-card {
+            background: var(--card-bg);
+            border: 1px solid #30363d;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            animation: fadeUp 0.35s ease;
+        }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+        .step-badge { display: inline-block; background: rgba(0,255,204,0.1); border: 1px solid var(--primary-neon); color: var(--primary-neon); padding: 3px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
+        .quiz-question { font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 24px; line-height: 1.4; }
+
+        /* ── OPTIONS ── */
+        .options-grid { display: grid; gap: 12px; }
+        .options-grid.two-col { grid-template-columns: 1fr 1fr; }
+        @media (max-width: 480px) { .options-grid.two-col { grid-template-columns: 1fr; } }
+
+        .option-btn {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 14px 18px;
+            color: #e6edf3;
+            cursor: pointer;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.95rem;
+            text-align: left;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .option-btn:hover { border-color: var(--primary-neon); color: var(--primary-neon); transform: translateY(-2px); box-shadow: 0 0 12px rgba(0,255,204,0.1); }
+        .option-btn.selected { border-color: var(--primary-neon); background: rgba(0,255,204,0.08); color: var(--primary-neon); }
+        .option-btn .emoji { font-size: 1.3rem; flex-shrink: 0; }
+        .option-btn .opt-label { font-weight: 600; display: block; }
+        .option-btn .opt-sub { font-size: 0.78rem; color: #8b949e; display: block; margin-top: 2px; }
+        .option-btn.selected .opt-sub { color: rgba(0,255,204,0.7); }
+
+        /* Checkbox style for multi-select */
+        .option-btn .checkmark {
+            width: 18px; height: 18px;
+            border: 2px solid #30363d;
+            border-radius: 4px;
+            flex-shrink: 0;
+            margin-left: auto;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.7rem;
+            transition: 0.2s;
+        }
+        .option-btn.selected .checkmark { background: var(--primary-neon); border-color: var(--primary-neon); color: #0b0e14; }
+
+        .next-btn {
+            width: 100%;
+            margin-top: 20px;
+            background: var(--primary-neon);
+            color: #0b0e14;
+            border: none;
+            border-radius: 10px;
+            padding: 14px;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: 0.2s;
+        }
+        .next-btn:hover { background: #fff; }
+        .next-btn:disabled { background: #1e2633; color: #8b949e; cursor: not-allowed; }
+
+        /* ── RESULT ── */
+        .result-card {
+            background: var(--card-bg);
+            border: 1px solid var(--primary-neon);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 0 30px rgba(0,255,204,0.1);
+            animation: fadeUp 0.4s ease;
+            display: none;
+        }
+
+        .result-header { text-align: center; margin-bottom: 28px; }
+        .result-emoji { font-size: 3rem; margin-bottom: 10px; }
+        .result-title { font-size: 1.5rem; font-weight: 800; color: var(--primary-neon); }
+        .result-subtitle { color: #8b949e; font-size: 0.9rem; margin-top: 6px; }
+
+        .result-tag {
+            display: inline-block;
+            background: rgba(0,255,204,0.1);
+            border: 1px solid var(--primary-neon);
+            color: var(--primary-neon);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .parts-list { margin-bottom: 24px; }
+        .parts-list h4 { color: #8b949e; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .part-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0d1117;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-bottom: 8px;
+            font-size: 0.88rem;
+        }
+        .part-name-col { color: #8b949e; }
+        .part-val-col { color: var(--highlight); font-weight: 700; font-family: monospace; }
+        .part-total { border-top: 1px solid #30363d; margin-top: 4px; padding-top: 10px; }
+        .part-total .part-name-col { color: var(--primary-neon); font-weight: 700; }
+        .part-total .part-val-col { color: var(--primary-neon); font-size: 1rem; }
+
+        .fps-preview { margin-bottom: 24px; }
+        .fps-preview h4 { color: #8b949e; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .fps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
+        .fps-chip {
+            background: #0d1117;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 0.82rem;
+        }
+        .fps-chip .game-name { color: #8b949e; display: block; margin-bottom: 2px; }
+        .fps-chip .fps-num { font-weight: 800; font-family: monospace; }
+        .fps-chip .fps-num.low    { color: #ff4d4d; }
+        .fps-chip .fps-num.medium { color: var(--highlight); }
+        .fps-chip .fps-num.high   { color: var(--primary-neon); }
+        .fps-chip .fps-num.ultra  { color: var(--purple); }
+
+        .tip-box {
+            background: rgba(255,219,77,0.06);
+            border-left: 3px solid var(--highlight);
+            border-radius: 0 8px 8px 0;
+            padding: 12px 16px;
+            font-size: 0.85rem;
+            color: #c9d1d9;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+        .tip-box strong { color: var(--highlight); }
+
+        .result-actions { display: flex; gap: 12px; }
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: 0.2s;
+            display: inline-block;
+        }
+        .action-btn.primary { background: var(--primary-neon); color: #0b0e14; border: none; }
+        .action-btn.primary:hover { background: #fff; }
+        .action-btn.secondary { background: transparent; color: var(--primary-neon); border: 1px solid var(--primary-neon); }
+        .action-btn.secondary:hover { background: rgba(0,255,204,0.08); }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="logo">Gaming Budget Hub</div>
+    <div class="mobile-menu" id="mobile-menu">☰</div>
+    <nav class="nav" id="nav-menu">
+        <a href="index.html">🏠 Home</a>
+        <a href="builds.html">🖥️ PC Builds</a>
+        <a href="fps-guides.html">📊 FPS Guides</a>
+        <a href="fps-counter.html">⚡ FPS Counter</a>
+        <a href="quiz.html" class="active">🎯 Build Quiz</a>
+        <a href="search.html">🔍 Search</a>
+        <a href="faq.html">❓ FAQ</a>
+        <a href="upgrade-guide.html">📈 Upgrade Guide</a>
+        <a href="contact.html">📩 Contact Us</a>
+    </nav>
+    <button id="theme-toggle" class="theme-btn">🌙</button>
+</header>
+
+<main>
+    <div class="page-title">
+        <h1>🎮 Find Your <span>Perfect Build</span></h1>
+        <p>Answer 3 quick questions — we'll pick the best build for you</p>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-wrap" id="progressWrap">
+        <div class="progress-labels">
+            <span id="progressText">Step 1 of 3</span>
+            <span id="progressPct">33%</span>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill" id="progressFill" style="width: 33%"></div>
+        </div>
+    </div>
+
+    <!-- ── STEP 1: Budget ── -->
+    <div class="quiz-card" id="step1">
+        <div class="step-badge">Step 1 of 3</div>
+        <div class="quiz-question">💰 What's your budget?</div>
+        <div class="options-grid">
+            <button class="option-btn" data-value="20k" onclick="selectOption(this, 'budget')">
+                <span class="emoji">🪙</span>
+                <span><span class="opt-label">Around PKR 20,000</span><span class="opt-sub">Ultra budget starter</span></span>
+            </button>
+            <button class="option-btn" data-value="30k" onclick="selectOption(this, 'budget')">
+                <span class="emoji">💵</span>
+                <span><span class="opt-label">Around PKR 30,000</span><span class="opt-sub">E-sports entry level</span></span>
+            </button>
+            <button class="option-btn" data-value="40k" onclick="selectOption(this, 'budget')">
+                <span class="emoji">💸</span>
+                <span><span class="opt-label">Around PKR 40,000</span><span class="opt-sub">1080p budget gamer</span></span>
+            </button>
+            <button class="option-btn" data-value="50k" onclick="selectOption(this, 'budget')">
+                <span class="emoji">💰</span>
+                <span><span class="opt-label">Around PKR 50,000</span><span class="opt-sub">The sweet spot beast</span></span>
+            </button>
+            <button class="option-btn" data-value="60k" onclick="selectOption(this, 'budget')">
+                <span class="emoji">🤑</span>
+                <span><span class="opt-label">Around PKR 60,000</span><span class="opt-sub">Pro performance build</span></span>
+            </button>
+        </div>
+        <button class="next-btn" id="next1" onclick="goToStep(2)" disabled>Next →</button>
+    </div>
+
+    <!-- ── STEP 2: Games ── -->
+    <div class="quiz-card" id="step2" style="display:none">
+        <div class="step-badge">Step 2 of 3</div>
+        <div class="quiz-question">🎮 Which games do you play? <span style="color:#8b949e; font-size:0.85rem; font-weight:400;">(pick all that apply)</span></div>
+        <div class="options-grid two-col">
+            <button class="option-btn" data-value="valorant" onclick="toggleGame(this)">
+                <span class="emoji">🔫</span>
+                <span><span class="opt-label">Valorant</span></span>
+                <span class="checkmark">✓</span>
+            </button>
+            <button class="option-btn" data-value="cs2" onclick="toggleGame(this)">
+                <span class="emoji">💣</span>
+                <span><span class="opt-label">CS2</span></span>
+                <span class="checkmark">✓</span>
+            </button>
+            <button class="option-btn" data-value="pubg" onclick="toggleGame(this)">
+                <span class="emoji">🪖</span>
+                <span><span class="opt-label">PUBG</span></span>
+                <span class="checkmark">✓</span>
+            </button>
+            <button class="option-btn" data-value="fortnite" onclick="toggleGame(this)">
+                <span class="emoji">🏗️</span>
+                <span><span class="opt-label">Fortnite</span></span>
+                <span class="checkmark">✓</span>
+            </button>
+            <button class="option-btn" data-value="freefile" onclick="toggleGame(this)">
+                <span class="emoji">🔥</span>
+                <span><span class="opt-label">Free Fire</span></span>
+                <span class="checkmark">✓</span>
+            </button>
+            <button class="option-btn" data-value="gta5" onclick="toggleGame(this)">
+                <span class="emoji">🚗</span>
+                <span><span class="opt-label">GTA 5</span></span>
+                <span class="checkmark">✓</span>
+            </button>
+            <button class="option-btn" data-value="minecraft" onclick="toggleGame(this)">
+                <span class="emoji">⛏️</span>
+                <span><span class="opt-label">Minecraft</span></span>
+                <span class="checkmark">✓</span>
+            </button>
+            <button class="option-btn" data-value="fc24" onclick="toggleGame(this)">
+                <span class="emoji">⚽</span>
+                <span><span class="opt-label">FC 24</span></span>
+                <span class="checkmark">✓</span>
+            </button>
+            <button class="option-btn" data-value="dota2" onclick="toggleGame(this)">
+                <span class="emoji">⚔️</span>
+                <span><span class="opt-label">Dota 2</span></span>
+                <span class="checkmark">✓</span>
+            </button>
+            <button class="option-btn" data-value="warzone" onclick="toggleGame(this)">
+                <span class="emoji">🎯</span>
+                <span><span class="opt-label">Warzone</span></span>
+                <span class="checkmark">✓</span>
+            </button>
+        </div>
+        <button class="next-btn" id="next2" onclick="goToStep(3)" disabled>Next →</button>
+    </div>
+
+    <!-- ── STEP 3: Parts preference ── -->
+    <div class="quiz-card" id="step3" style="display:none">
+        <div class="step-badge">Step 3 of 3</div>
+        <div class="quiz-question">🛒 New or used parts?</div>
+        <div class="options-grid">
+            <button class="option-btn" data-value="used" onclick="selectOption(this, 'parts')">
+                <span class="emoji">♻️</span>
+                <span><span class="opt-label">Used parts (OLX / Hafeez Center)</span><span class="opt-sub">Best value, more risk — inspect before buying</span></span>
+            </button>
+            <button class="option-btn" data-value="mix" onclick="selectOption(this, 'parts')">
+                <span class="emoji">⚖️</span>
+                <span><span class="opt-label">Mix of new & used</span><span class="opt-sub">Used CPU/RAM, new GPU/PSU</span></span>
+            </button>
+            <button class="option-btn" data-value="new" onclick="selectOption(this, 'parts')">
+                <span class="emoji">📦</span>
+                <span><span class="opt-label">New parts only</span><span class="opt-sub">CZone / Daraz — warranty included</span></span>
+            </button>
+        </div>
+        <button class="next-btn" id="next3" onclick="showResult()" disabled>🎯 Get My Build!</button>
+    </div>
+
+    <!-- ── RESULT ── -->
+    <div class="result-card" id="resultCard">
+        <div class="result-header">
+            <div class="result-emoji" id="resultEmoji">🏆</div>
+            <div class="result-title" id="resultTitle">The Sweet Spot Beast</div>
+            <div class="result-subtitle" id="resultSubtitle">Perfect for your budget and games</div>
+        </div>
+
+        <div style="text-align:center; margin-bottom: 20px;">
+            <span class="result-tag" id="resultTag">PKR 50,000 Build</span>
+        </div>
+
+        <div class="parts-list">
+            <h4>📦 Parts List</h4>
+            <div id="partsList"></div>
+        </div>
+
+        <div class="fps-preview" id="fpsPreviewWrap">
+            <h4>📊 Your Games — Expected FPS</h4>
+            <div class="fps-grid" id="fpsGrid"></div>
+        </div>
+
+        <div class="tip-box" id="tipBox"></div>
+
+        <div class="result-actions">
+            <a href="builds.html" class="action-btn primary">View Full Build Details</a>
+            <button class="action-btn secondary" onclick="restartQuiz()">↩ Retake Quiz</button>
+        </div>
+    </div>
+</main>
+
+<footer style="background: #0d1117; border-top: 1px solid #30363d; padding: 40px 20px; text-align: center; margin-top: 50px; position: relative; z-index: 1;">
+    <p style="color: var(--primary-neon); font-weight: 600;">GAMING BUDGET HUB</p>
+    <p style="color: #8b949e; font-size: 0.9rem;">Your guide to budget gaming in Pakistan.</p>
+    <div style="margin-top: 15px;">
+        <a href="#" style="color: #fff; margin: 0 10px; text-decoration: none;">Discord</a>
+        <a href="#" style="color: #fff; margin: 0 10px; text-decoration: none;">YouTube</a>
+        <a href="#" style="color: #fff; margin: 0 10px; text-decoration: none;">Instagram</a>
+    </div>
+    <p style="color: #484f58; font-size: 0.8rem; margin-top: 20px;">&copy; 2026 Gaming Budget Hub. All rights reserved.</p>
+</footer>
+
+<script src="main.js"></script>
+<script>
+// ── STATE ──
+const answers = { budget: null, games: [], parts: null };
+
+// ── BUILD DATA ──
+const builds = {
+    '20k': {
+        name: 'Ultra Budget Starter',
+        emoji: '🪙',
+        tag: 'PKR 20,000 Build',
+        parts: [
+            { name: 'CPU: Core i5-2400',           cost: 'PKR 3,500' },
+            { name: 'Motherboard: H61 OEM',         cost: 'PKR 4,500' },
+            { name: 'GPU: Intel HD / GT 610',       cost: 'PKR 3,000' },
+            { name: 'RAM: 8GB DDR3',                cost: 'PKR 2,500' },
+            { name: 'Storage: 128GB SSD + 500GB HDD', cost: 'PKR 4,000' },
+            { name: 'Casing & Power Supply',        cost: 'PKR 3,000' },
+        ],
+        total: 'PKR 20,500',
+        fps: { valorant: 45, cs2: 40, pubg: 20, fortnite: 30, freefile: 60, gta5: 25, minecraft: 60, fc24: 35, dota2: 35, warzone: 18 },
+        tip: '<strong>💡 Buy tip:</strong> At this budget, OLX is your best friend. Search "i5 2400 complete set" — many sellers bundle CPU + board + RAM together for under 10k. Always test before buying!',
+        subtitle: 'Great for esports lite & casual gaming'
+    },
+    '30k': {
+        name: 'The E-Sports Entry',
+        emoji: '🎮',
+        tag: 'PKR 30,000 Build',
+        parts: [
+            { name: 'CPU: Core i5-3470',         cost: 'PKR 4,800' },
+            { name: 'Motherboard: B75 High Grade', cost: 'PKR 5,500' },
+            { name: 'GPU: GT 1030 2GB GDDR5',    cost: 'PKR 11,500' },
+            { name: 'RAM: 8GB DDR3 1600MHz',      cost: 'PKR 3,000' },
+            { name: 'Storage: 256GB SSD',         cost: 'PKR 3,500' },
+            { name: 'Casing & 300W PSU',          cost: 'PKR 2,500' },
+        ],
+        total: 'PKR 30,800',
+        fps: { valorant: 90, cs2: 80, pubg: 40, fortnite: 60, freefile: 90, gta5: 45, minecraft: 110, fc24: 60, dota2: 65, warzone: 35 },
+        tip: '<strong>💡 Buy tip:</strong> Make sure the GT 1030 says <strong>GDDR5</strong> — not GDDR4. The DDR4 version is way slower and a common OLX scam. Always confirm the sticker before handing over cash.',
+        subtitle: 'Smooth esports at 1080p low-medium'
+    },
+    '40k': {
+        name: '1080p Budget Gamer',
+        emoji: '🔥',
+        tag: 'PKR 40,000 Build',
+        parts: [
+            { name: 'CPU: Core i5-4570',              cost: 'PKR 6,500' },
+            { name: 'Motherboard: H81 Chipset',       cost: 'PKR 6,000' },
+            { name: 'GPU: RX 460 2GB',                cost: 'PKR 14,000' },
+            { name: 'RAM: 16GB DDR3',                 cost: 'PKR 5,500' },
+            { name: 'Storage: 256GB SSD + 500GB HDD', cost: 'PKR 5,000' },
+            { name: 'PSU: 400W 80+ Bronze',           cost: 'PKR 4,000' },
+        ],
+        total: 'PKR 41,000',
+        fps: { valorant: 144, cs2: 130, pubg: 60, fortnite: 90, freefile: 120, gta5: 60, minecraft: 200, fc24: 90, dota2: 90, warzone: 55 },
+        tip: '<strong>💡 Buy tip:</strong> Always buy the PSU new — never buy used PSUs. A fake PSU can fry your entire system. Spend a bit more and get a legit 80+ Bronze from CZone or Daraz.',
+        subtitle: '144 FPS in Valorant, solid 1080p gaming'
+    },
+    '50k': {
+        name: 'The Sweet Spot Beast',
+        emoji: '⚡',
+        tag: 'PKR 50,000 Build',
+        parts: [
+            { name: 'CPU: Ryzen 5 2600',        cost: 'PKR 13,500' },
+            { name: 'Motherboard: A320M Board',  cost: 'PKR 9,000' },
+            { name: 'GPU: AMD RX 580 8GB',       cost: 'PKR 18,500' },
+            { name: 'RAM: 8GB DDR4 3200MHz',     cost: 'PKR 5,000' },
+            { name: 'Storage: 256GB NVMe SSD',   cost: 'PKR 4,500' },
+        ],
+        total: 'PKR 50,500',
+        fps: { valorant: 220, cs2: 200, pubg: 90, fortnite: 140, freefile: 144, gta5: 85, minecraft: 350, fc24: 120, dota2: 140, warzone: 80 },
+        tip: '<strong>💡 Buy tip:</strong> The RX 580 was popular for crypto mining — always run FurMark stress test for 15 mins before buying. Temps over 85°C or instant crashes = walk away.',
+        subtitle: 'Best value for 1080p gaming in Pakistan'
+    },
+    '60k': {
+        name: 'Pro Performance Build',
+        emoji: '🏆',
+        tag: 'PKR 60,000 Build',
+        parts: [
+            { name: 'CPU: Ryzen 5 3600',          cost: 'PKR 21,000' },
+            { name: 'Motherboard: B350M Board',   cost: 'PKR 10,000' },
+            { name: 'GPU: GTX 1650 Super 4GB',    cost: 'PKR 22,000' },
+            { name: 'RAM: 16GB DDR4 3200MHz',     cost: 'PKR 8,500' },
+        ],
+        total: 'PKR 61,500',
+        fps: { valorant: 280, cs2: 260, pubg: 120, fortnite: 180, freefile: 144, gta5: 110, minecraft: 500, fc24: 144, dota2: 180, warzone: 110 },
+        tip: '<strong>💡 Buy tip:</strong> At this budget, buy the GPU and RAM new from CZone or RedTech — they offer short warranties and it\'s worth it. Get the CPU used from OLX to save around 5k.',
+        subtitle: 'High FPS, future-proof for 1–2 years'
+    }
+};
+
+const gameLabels = { valorant: 'Valorant', cs2: 'CS2', pubg: 'PUBG', fortnite: 'Fortnite', freefile: 'Free Fire', gta5: 'GTA 5', minecraft: 'Minecraft', fc24: 'FC 24', dota2: 'Dota 2', warzone: 'Warzone' };
+
+function getFpsClass(fps) {
+    if (fps < 40)  return 'low';
+    if (fps < 80)  return 'medium';
+    if (fps < 144) return 'high';
+    return 'ultra';
+}
+
+// ── STEP LOGIC ──
+function selectOption(btn, type) {
+    btn.closest('.options-grid').querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    answers[type] = btn.dataset.value;
+    const nextId = type === 'budget' ? 'next1' : 'next3';
+    document.getElementById(nextId).disabled = false;
+}
+
+function toggleGame(btn) {
+    btn.classList.toggle('selected');
+    const val = btn.dataset.value;
+    if (btn.classList.contains('selected')) {
+        if (!answers.games.includes(val)) answers.games.push(val);
+    } else {
+        answers.games = answers.games.filter(g => g !== val);
+    }
+    document.getElementById('next2').disabled = answers.games.length === 0;
+}
+
+function goToStep(step) {
+    document.querySelectorAll('.quiz-card').forEach(c => c.style.display = 'none');
+    document.getElementById('step' + step).style.display = 'block';
+    const pct = step === 2 ? 66 : 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressText').textContent = `Step ${step} of 3`;
+    document.getElementById('progressPct').textContent = pct + '%';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showResult() {
+    document.querySelectorAll('.quiz-card').forEach(c => c.style.display = 'none');
+    document.getElementById('progressWrap').style.display = 'none';
+
+    const build = builds[answers.budget];
+
+    document.getElementById('resultEmoji').textContent    = build.emoji;
+    document.getElementById('resultTitle').textContent    = build.name;
+    document.getElementById('resultSubtitle').textContent = build.subtitle;
+    document.getElementById('resultTag').textContent      = build.tag;
+    document.getElementById('tipBox').innerHTML           = build.tip;
+
+    // Parts list
+    const partsContainer = document.getElementById('partsList');
+    partsContainer.innerHTML = build.parts.map(p => `
+        <div class="part-row">
+            <span class="part-name-col">${p.name}</span>
+            <span class="part-val-col">${p.cost}</span>
+        </div>
+    `).join('') + `
+        <div class="part-row part-total">
+            <span class="part-name-col">Approx Total</span>
+            <span class="part-val-col">${build.total}</span>
+        </div>
+    `;
+
+    // FPS for selected games (or all if none selected)
+    const gamesToShow = answers.games.length > 0 ? answers.games : Object.keys(gameLabels);
+    const fpsGrid = document.getElementById('fpsGrid');
+    fpsGrid.innerHTML = gamesToShow.map(g => {
+        const fps = build.fps[g];
+        const cls = getFpsClass(fps);
+        return `<div class="fps-chip">
+            <span class="game-name">${gameLabels[g]}</span>
+            <span class="fps-num ${cls}">${fps}+ FPS</span>
+        </div>`;
+    }).join('');
+
+    document.getElementById('resultCard').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restartQuiz() {
+    answers.budget = null;
+    answers.games  = [];
+    answers.parts  = null;
+    document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+    document.getElementById('next1').disabled = true;
+    document.getElementById('next2').disabled = true;
+    document.getElementById('next3').disabled = true;
+    document.getElementById('resultCard').style.display = 'none';
+    document.getElementById('progressWrap').style.display = 'block';
+    document.getElementById('progressFill').style.width = '33%';
+    document.getElementById('progressText').textContent = 'Step 1 of 3';
+    document.getElementById('progressPct').textContent = '33%';
+    document.getElementById('step1').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
