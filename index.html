@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Best budget PC builds and FPS guides for gamers in Pakistan.">
+    <meta property="og:title" content="Gaming Budget Hub">
+    <meta property="og:description" content="Level up your setup without breaking the bank.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1542751371-adc38448a05e">
+    <title>Gaming Budget Hub | Home</title>
+    <style>
+        html { scroll-behavior: smooth; }
+        :root { --primary-neon: #00ffcc; --bg-deep: #0b0e14; --card-bg: #161b22; }
+        body.light-mode { --bg-deep: #f0f2f5; --card-bg: #ffffff; color: #1c1e21; }
+        body.light-mode .card, body.light-mode .header { background: #ffffff; border-color: #ddd; }
+        body.light-mode .vision-text p { color: #444; }
+        body.light-mode .featured-specs li { background: #f7f9fb; border-color: var(--primary-neon); }
+
+        /* Light Mode Navigation Fix */
+        body.light-mode .nav a { color: #1c1e21; }
+        body.light-mode .nav a:hover, body.light-mode .nav a.active { color: #008f72; }
+        body.light-mode .mobile-menu { color: #1c1e21; }
+
+        /* Light Mode Footer Fix */
+        body.light-mode footer { background: #ffffff !important; border-top: 1px solid #ddd !important; }
+        body.light-mode footer p, body.light-mode footer a { color: #1c1e21 !important; }
+        body.light-mode footer p[style*="var(--primary-neon)"] { color: #008f72 !important; }
+
+        body { background-color: var(--bg-deep); color: #e6edf3; font-family: 'Segoe UI', sans-serif; margin: 0; transition: 0.3s; }
+        .header { background: rgba(13, 17, 23, 0.95); border-bottom: 2px solid var(--primary-neon); display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; position: sticky; top: 0; z-index: 2000; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary-neon); text-transform: uppercase; }
+        .nav { display: flex; align-items: center; }
+        .nav a { color: #fff; text-decoration: none; margin-left: 20px; font-weight: 500; transition: 0.3s; }
+        .nav a:hover { color: var(--primary-neon); }
+        .nav a.active { color: var(--primary-neon); border-bottom: 2px solid var(--primary-neon); padding-bottom: 5px; }
+
+        .hero { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'); background-size: cover; background-position: center; height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 10px; color: #fff; text-shadow: 0 0 10px var(--primary-neon); }
+        
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        .card { background: var(--card-bg); border: 1px solid #30363d; border-radius: 12px; padding: 25px; margin-bottom: 20px; transition: 0.3s; }
+        .card:hover { border-color: var(--primary-neon); transform: translateY(-5px); box-shadow: 0 0 15px rgba(0, 255, 204, 0.2); }
+        
+        .featured-specs { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+        .featured-specs li { background: #0d1117; padding: 15px; border-radius: 8px; border-left: 4px solid var(--primary-neon); }
+        
+        .theme-btn { background: none; border: 1px solid var(--primary-neon); color: var(--primary-neon); padding: 8px 15px; cursor: pointer; border-radius: 20px; margin-left: 20px; font-size: 1.2rem; }
+        .mobile-menu { display: none; font-size: 1.5rem; cursor: pointer; color: var(--primary-neon); }
+
+        @media (max-width: 768px) {
+            .nav { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: #0d1117; flex-direction: column; padding: 20px 0; border-bottom: 2px solid var(--primary-neon); }
+            .nav.active { display: flex; }
+            .nav a { margin: 10px 0; }
+            .mobile-menu { display: block; }
+            .hero h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="logo">Gaming Budget Hub</div>
+    
+    <div class="mobile-menu" id="mobile-menu">☰</div>
+    
+    <nav class="nav" id="nav-menu">
+        <a href="index.html" class="active">🏠 Home</a>
+        <a href="builds.html">🖥️ PC Builds</a>
+        <a href="fps-guides.html">📊 FPS Guides</a>
+        <a href="fps-counter.html">⚡ FPS Counter</a>
+        <a href="quiz.html">🎯 Build Quiz</a>
+        <a href="faq.html">❓ FAQ</a>
+        <a href="upgrade-guide.html">📈 Upgrade Guide</a>
+        <a href="contact.html">📩 Contact Us</a>
+    </nav>
+    
+    <button id="theme-toggle" class="theme-btn">🌙</button>
+</header>
+
+<section class="hero">
+    <h1>Level Up Your Setup</h1>
+    <p style="font-size: 1.2rem; color: #8b949e;">Master the art of high-performance budget PC building in Pakistan.</p>
+</section>
+
+<main class="container">
+    <section>
+        <h2 style="color: var(--primary-neon);">Featured Build: The Sweet Spot Beast (72k)</h2>
+        <div class="card">
+            <p>Our most popular recommendation for 1080p competitive gaming.</p>
+            <ul class="featured-specs">
+                <li><b>CPU:</b> Ryzen 5 2600</li>
+                <li><b>GPU:</b> AMD RX 580 8GB</li>
+                <li><b>RAM:</b> 8GB DDR4</li>
+                <li><b>Storage:</b> 256GB NVMe SSD</li>
+            </ul>
+        </div>
+    </section>
+
+    <section style="margin-top: 40px;">
+        <div class="card" style="border: 2px solid var(--primary-neon); background: linear-gradient(135deg, #0d1117, #161b22); text-align: center; padding: 40px 25px;">
+            <div style="font-size: 2.5rem; margin-bottom: 12px;">🎯</div>
+            <h2 style="color: var(--primary-neon); margin-bottom: 10px;">Not sure which build to get?</h2>
+            <p style="color: #8b949e; margin-bottom: 24px; font-size: 0.95rem;">Answer 3 quick questions — we'll pick the perfect build for your budget and games in 30 seconds.</p>
+            <a href="quiz.html" style="display: inline-block; background: var(--primary-neon); color: #0b0e14; padding: 14px 36px; border-radius: 10px; font-weight: 800; text-decoration: none; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; transition: 0.2s;" onmouseover="this.style.background='#fff'" onmouseout="this.style.background='var(--primary-neon)'">Take the Quiz →</a>
+        </div>
+    </section>
+
+    <section style="margin-top: 40px;">
+        <h2 style="color: var(--primary-neon);">Used Parts Buyer's Guide</h2>
+        <div class="card" style="border-top: 3px solid #ff4d4d;">
+            <p>Don't get scammed in the used market. Run these tests before buying:</p>
+            <ul class="featured-specs">
+                <li><b>1. GPU Stress</b> Run FurMark for 15 mins. Max temp should be < 85°C.</li>
+                <li><b>2. Drive Health</b> Use CrystalDiskInfo. Must be 100% / Good.</li>
+                <li><b>3. Power Stability</b> Restart the PC 3 times to test the PSU.</li>
+            </ul>
+        </div>
+    </section>
+</main>
+
+<footer style="background: #0d1117; border-top: 1px solid #30363d; padding: 40px 20px; text-align: center; margin-top: 50px;">
+    <p style="color: var(--primary-neon); font-weight: 600;">GAMING BUDGET HUB</p>
+    <p style="color: #8b949e; font-size: 0.9rem;">Your guide to budget gaming in Pakistan.</p>
+    <div style="margin-top: 15px;">
+        <a href="#" style="color: #fff; margin: 0 10px; text-decoration: none;">Discord</a>
+        <a href="#" style="color: #fff; margin: 0 10px; text-decoration: none;">YouTube</a>
+        <a href="#" style="color: #fff; margin: 0 10px; text-decoration: none;">Instagram</a>
+    </div>
+    <p style="color: #484f58; font-size: 0.8rem; margin-top: 20px;">&copy; 2026 Gaming Budget Hub. All rights reserved.</p>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Gaming Budget Hub</title>
+    <style>
+        html { scroll-behavior: smooth; }
+        :root { --primary-neon: #00ffcc; --bg-deep: #0b0e14; --card-bg: #161b22; }
+        body.light-mode { --bg-deep: #f4f4f9; --card-bg: #ffffff; color: #333; }
+        body { background-color: var(--bg-deep); color: #e6edf3; font-family: 'Segoe UI', sans-serif; margin: 0; transition: 0.3s; }
+        
+        .header { background: rgba(13, 17, 23, 0.95); border-bottom: 2px solid var(--primary-neon); display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; position: sticky; top: 0; z-index: 2000; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary-neon); text-transform: uppercase; }
+        .nav { display: flex; align-items: center; }
+        .nav a { color: #fff; text-decoration: none; margin-left: 20px; font-weight: 500; transition: 0.3s; }
+        .nav a:hover { color: var(--primary-neon); }
+        .nav a.active { color: var(--primary-neon); border-bottom: 2px solid var(--primary-neon); padding-bottom: 5px; }
+        .mobile-menu { display: none; font-size: 1.5rem; cursor: pointer; color: var(--primary-neon); }
+
+        @media (max-width: 768px) {
+            .nav { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: #0d1117; flex-direction: column; padding: 20px 0; }
+            .nav.active { display: flex; }
+            .mobile-menu { display: block; }
+        }
+
+        .container { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+        .card { background: var(--card-bg); border: 1px solid #30363d; border-radius: 12px; padding: 30px; transition: 0.3s; }
+        .card:hover { border-color: var(--primary-neon); transform: translateY(-5px); box-shadow: 0 0 15px rgba(0, 255, 204, 0.2); }
+        
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; color: var(--primary-neon); font-weight: bold; }
+        input, textarea { width: 100%; padding: 12px; background: #0d1117; border: 1px solid #30363d; border-radius: 6px; color: #fff; box-sizing: border-box; }
+        body.light-mode input, body.light-mode textarea { background: #f0f0f0; color: #333; border-color: #ccc; }
+        
+        .submit-btn { background: var(--primary-neon); color: #0b0e14; border: none; padding: 12px 25px; border-radius: 6px; font-weight: 800; cursor: pointer; text-transform: uppercase; width: 100%; transition: 0.3s; }
+        .submit-btn:hover { background: #fff; transform: scale(1.02); }
+        
+        .theme-btn { background: none; border: 1px solid var(--primary-neon); color: var(--primary-neon); cursor: pointer; padding: 5px 12px; border-radius: 5px; font-size: 1.2rem; }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="logo">Gaming Budget Hub</div>
+    
+    <div class="mobile-menu" id="mobile-menu">☰</div>
+    
+    <nav class="nav" id="nav-menu">
+        <a href="index.html">🏠 Home</a>
+        <a href="builds.html">🖥️ PC Builds</a>
+        <a href="fps-guides.html">📊 FPS Guides</a>
+        <a href="fps-counter.html">⚡ FPS Counter</a>
+        <a href="quiz.html">🎯 Build Quiz</a>
+        <a href="faq.html">❓ FAQ</a>
+        <a href="upgrade-guide.html">📈 Upgrade Guide</a>
+        <a href="contact.html" class="active">📩 Contact Us</a>
+    </nav>
+    
+    <button id="theme-toggle" class="theme-btn">🌙</button>
+</header>
+
+<main class="container">
+    <h2 style="color: var(--primary-neon); text-align: center;">Get In Touch</h2>
+    <p style="text-align: center; color: #8b949e; margin-bottom: 30px;">Drop us a message and we'll help you build your dream budget PC.</p>
+    <div class="card">
+        <form action="https://formspree.io/f/xgolarpl" method="POST">
+            <div class="form-group"><label>Name</label><input type="text" name="name" required></div>
+            <div class="form-group"><label>Email Address</label><input type="email" name="email" required></div>
+            <div class="form-group"><label>Message</label><textarea name="message" rows="5" required></textarea></div>
+            <input type="text" name="_gotcha" style="display:none">
+            <button type="submit" class="submit-btn">Send Message</button>
+        </form>
+    </div>
+</main>
+
+<footer style="background: #0d1117; border-top: 1px solid #30363d; padding: 40px 20px; text-align: center; margin-top: 50px;">
+    <p style="color: var(--primary-neon); font-weight: 600;">GAMING BUDGET HUB</p>
+    <p style="color: #8b949e; font-size: 0.9rem;">Your guide to budget gaming in Pakistan.</p>
+    <div style="margin-top: 15px;">
+        <a href="#" style="color: #fff; margin: 0 10px; text-decoration: none;">Discord</a>
+        <a href="#" style="color: #fff; margin: 0 10px; text-decoration: none;">YouTube</a>
+        <a href="#" style="color: #fff; margin: 0 10px; text-decoration: none;">Instagram</a>
+    </div>
+    <p style="color: #484f58; font-size: 0.8rem; margin-top: 20px;">&copy; 2026 Gaming Budget Hub. All rights reserved.</p>
+</footer>
+<script src="main.js"></script>
+</body>
+</html>

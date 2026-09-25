@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upgrade Path Guide | Gaming Budget Hub</title>
+    <meta name="description" content="Step by step upgrade guide for budget PC gamers in Pakistan. Know what to upgrade first and when.">
+    <style>
+        html { scroll-behavior: smooth; }
+        :root { --primary-neon: #00ffcc; --bg-deep: #0b0e14; --card-bg: #161b22; --highlight: #ffdb4d; --red: #ff4d6d; --purple: #9d7bff; }
+        body.light-mode { --bg-deep: #f0f2f5; --card-bg: #ffffff; color: #333; }
+        body.light-mode .nav a { color: #333; }
+        body.light-mode .step-card { background: #fff; border-color: #ddd; }
+        body.light-mode .upgrade-item { background: #f5f5f5; }
+        body.light-mode .path-line { background: #ddd; }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg-deep); color: #e6edf3; font-family: 'Segoe UI', sans-serif; min-height: 100vh; transition: 0.3s; }
+        body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(0,255,204,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,204,0.03) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; z-index: 0; }
+
+        .header { background: rgba(13,17,23,0.97); border-bottom: 2px solid var(--primary-neon); display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; position: sticky; top: 0; z-index: 2000; backdrop-filter: blur(10px); }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary-neon); text-transform: uppercase; }
+        .nav { display: flex; align-items: center; }
+        .nav a { color: #fff; text-decoration: none; margin-left: 20px; font-weight: 500; transition: 0.3s; font-size: 0.9rem; }
+        .nav a:hover { color: var(--primary-neon); }
+        .nav a.active { color: var(--primary-neon); border-bottom: 2px solid var(--primary-neon); padding-bottom: 3px; }
+        .theme-btn { background: none; border: 1px solid var(--primary-neon); color: var(--primary-neon); cursor: pointer; padding: 5px 12px; border-radius: 5px; }
+        .mobile-menu { display: none; font-size: 1.8rem; color: var(--primary-neon); cursor: pointer; }
+        @media (max-width: 768px) {
+            .mobile-menu { display: block; }
+            .nav { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background: var(--bg-deep); border-bottom: 2px solid var(--primary-neon); padding: 20px 0; }
+            .nav.active { display: flex !important; }
+            .nav a { margin: 12px 0; text-align: center; }
+        }
+
+        main { max-width: 820px; margin: 0 auto; padding: 40px 20px 80px; position: relative; z-index: 1; }
+
+        .page-title { text-align: center; margin-bottom: 14px; }
+        .page-title h1 { font-size: 2rem; font-weight: 800; color: #fff; }
+        .page-title h1 span { color: var(--primary-neon); }
+        .page-title p { color: #8b949e; margin-top: 8px; font-size: 0.92rem; }
+
+        /* Rule #1 box */
+        .rule-box {
+            background: rgba(255,219,77,0.07);
+            border: 1px solid var(--highlight);
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin: 28px 0 40px;
+            font-size: 0.92rem;
+            line-height: 1.7;
+            color: #c9d1d9;
+        }
+        .rule-box strong { color: var(--highlight); font-size: 1rem; display: block; margin-bottom: 6px; }
+
+        /* ── PATH SECTION ── */
+        .path-section { margin-bottom: 50px; }
+        .path-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+        .path-from, .path-to {
+            background: var(--card-bg);
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 10px 18px;
+            font-weight: 800;
+            font-size: 1rem;
+        }
+        .path-from { color: #8b949e; }
+        .path-to   { color: var(--primary-neon); border-color: var(--primary-neon); }
+        .path-arrow { font-size: 1.4rem; color: var(--primary-neon); }
+        .path-cost-badge {
+            margin-left: auto;
+            background: rgba(0,255,204,0.1);
+            border: 1px solid var(--primary-neon);
+            color: var(--primary-neon);
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        /* Vertical upgrade steps */
+        .upgrade-steps { position: relative; padding-left: 36px; }
+        .upgrade-steps::before { content: ''; position: absolute; left: 12px; top: 8px; bottom: 8px; width: 2px; background: linear-gradient(to bottom, var(--primary-neon), #1e2633); border-radius: 2px; }
+
+        .upgrade-step { position: relative; margin-bottom: 16px; }
+        .upgrade-step::before {
+            content: attr(data-num);
+            position: absolute;
+            left: -36px;
+            top: 12px;
+            width: 24px; height: 24px;
+            background: var(--primary-neon);
+            color: #0b0e14;
+            border-radius: 50%;
+            font-size: 0.72rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .upgrade-item {
+            background: var(--card-bg);
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            transition: 0.2s;
+        }
+        .upgrade-item:hover { border-color: var(--primary-neon); }
+        .upgrade-item-left { flex: 1; }
+        .upgrade-part { font-weight: 700; color: #e6edf3; font-size: 0.95rem; margin-bottom: 3px; }
+        .upgrade-reason { font-size: 0.8rem; color: #8b949e; line-height: 1.5; }
+        .upgrade-reason strong { color: var(--highlight); }
+        .upgrade-cost { color: var(--highlight); font-weight: 800; font-family: monospace; font-size: 0.9rem; white-space: nowrap; flex-shrink: 0; }
+
+        .section-divider { border: none; border-top: 1px solid #1e2633; margin: 48px 0; }
+
+        /* Priority rule */
+        .priority-order {
+            background: var(--card-bg);
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 40px;
+        }
+        .priority-order h3 { color: var(--primary-neon); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+        .priority-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .priority-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.9rem;
+            color: #c9d1d9;
+        }
+        .priority-num {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 900; font-size: 0.78rem; flex-shrink: 0;
+        }
+        .p1 { background: #ff4d6d33; color: #ff4d6d; border: 1px solid #ff4d6d; }
+        .p2 { background: #ffdb4d33; color: #ffdb4d; border: 1px solid #ffdb4d; }
+        .p3 { background: rgba(0,255,204,0.1); color: var(--primary-neon); border: 1px solid var(--primary-neon); }
+        .p4 { background: rgba(157,123,255,0.1); color: var(--purple); border: 1px solid var(--purple); }
+        .p5 { background: #1e2633; color: #8b949e; border: 1px solid #30363d; }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="logo">Gaming Budget Hub</div>
+    <div class="mobile-menu" id="mobile-menu">☰</div>
+    <nav class="nav" id="nav-menu">
+        <a href="index.html">🏠 Home</a>
+        <a href="builds.html">🖥️ PC Builds</a>
+        <a href="fps-guides.html">📊 FPS Guides</a>
+        <a href="fps-counter.html">⚡ FPS Counter</a>
+        <a href="quiz.html">🎯 Build Quiz</a>
+        <a href="faq.html">❓ FAQ</a>
+        <a href="upgrade-guide.html" class="active">📈 Upgrade Guide</a>
+        <a href="contact.html">📩 Contact Us</a>
+    </nav>
+    <button id="theme-toggle" class="theme-btn">🌙</button>
+</header>
+
+<main>
+    <div class="page-title">
+        <h1>📈 PC <span>Upgrade Path</span> Guide</h1>
+        <p>Started small? Here's exactly what to upgrade next — and in what order</p>
+    </div>
+
+    <div class="rule-box">
+        <strong>🔑 The Golden Rule of PC Upgrades</strong>
+        Always upgrade your <strong style="color:var(--primary-neon)">GPU first</strong> for gaming — it gives the biggest FPS boost per rupee spent. Then RAM, then CPU. Never upgrade your CPU before your GPU unless your CPU is literally below minimum specs for the game.
+    </div>
+
+    <!-- Priority order -->
+    <div class="priority-order">
+        <h3>⚙️ Upgrade Priority Order (for Gaming)</h3>
+        <ul class="priority-list">
+            <li><span class="priority-num p1">1</span> <strong>GPU</strong> — Biggest FPS gains. Always upgrade this first.</li>
+            <li><span class="priority-num p2">2</span> <strong>RAM</strong> — Going from 8GB → 16GB makes a noticeable difference in modern games.</li>
+            <li><span class="priority-num p3">3</span> <strong>Storage</strong> — SSD massively reduces load times even if FPS stays the same.</li>
+            <li><span class="priority-num p4">4</span> <strong>CPU</strong> — Only upgrade if your GPU is already strong and you're CPU bottlenecked.</li>
+            <li><span class="priority-num p5">5</span> <strong>Motherboard</strong> — Only when switching CPU platforms (e.g. LGA1150 → AM4).</li>
+        </ul>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- 20k → 30k -->
+    <div class="path-section">
+        <div class="path-header">
+            <div class="path-from">20k Build</div>
+            <div class="path-arrow">→</div>
+            <div class="path-to">30k Build</div>
+            <div class="path-cost-badge">+~PKR 10,000</div>
+        </div>
+        <div class="upgrade-steps">
+            <div class="upgrade-step" data-num="1">
+                <div class="upgrade-item">
+                    <div class="upgrade-item-left">
+                        <div class="upgrade-part">🎮 GPU: Intel HD / GT 610 → GT 1030 2GB GDDR5</div>
+                        <div class="upgrade-reason">This is your <strong>#1 priority</strong>. The GT 1030 GDDR5 gives you 2x the gaming performance. You'll go from struggling in Valorant to hitting 90+ FPS.</div>
+                    </div>
+                    <div class="upgrade-cost">~PKR 8,500</div>
+                </div>
+            </div>
+            <div class="upgrade-step" data-num="2">
+                <div class="upgrade-item">
+                    <div class="upgrade-item-left">
+                        <div class="upgrade-part">💾 Storage: Add 256GB SSD if not already present</div>
+                        <div class="upgrade-reason">Games load dramatically faster. Windows feels snappier. <strong>Worth every rupee.</strong></div>
+                    </div>
+                    <div class="upgrade-cost">~PKR 3,500</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 30k → 40k -->
+    <div class="path-section">
+        <div class="path-header">
+            <div class="path-from">30k Build</div>
+            <div class="path-arrow">→</div>
+            <div class="path-to">40k Build</div>
+            <div class="path-cost-badge">+~PKR 10,000</div>
+        </div>
+        <div class="upgrade-steps">
+            <div class="upgrade-step" data-num="1">
+                <div class="upgrade-item">
+                    <div class="upgrade-item-left">
+                        <div class="upgrade-part">🎮 GPU: GT 1030 → RX 460 2GB (or RX 470 if budget allows)</div>
+                        <div class="upgrade-reason">Massive jump. You'll hit <strong>144 FPS in Valorant</strong> and 60 FPS in GTA 5. The RX 460 is the sweet spot used GPU at this tier.</div>
+                    </div>
+                    <div class="upgrade-cost">~PKR 10,000</div>
+                </div>
+            </div>
+            <div class="upgrade-step" data-num="2">
+                <div class="upgrade-item">
+                    <div class="upgrade-item-left">
+                        <div class="upgrade-part">🔋 RAM: 8GB → 16GB DDR3</div>
+                        <div class="upgrade-reason">Modern games like GTA 5 and PUBG <strong>need 16GB</strong> to run without stuttering. Add another matching 8GB stick.</div>
+                    </div>
+                    <div class="upgrade-cost">~PKR 2,500</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 40k → 50k -->
+    <div class="path-section">
+        <div class="path-header">
+            <div class="path-from">40k Build</div>
+            <div class="path-arrow">→</div>
+            <div class="path-to">50k Build</div>
+            <div class="path-cost-badge">+~PKR 10,000</div>
+        </div>
+        <div class="upgrade-steps">
+            <div class="upgrade-step" data-num="1">
+                <div class="upgrade-item">
+                    <div class="upgrade-item-left">
+                        <div class="upgrade-part">🎮 GPU: RX 460 → RX 580 8GB</div>
+                        <div class="upgrade-reason">The RX 580 is 4x more powerful than the RX 460. You'll go from 60 FPS to <strong>220+ FPS in Valorant</strong> and smooth 1080p in every game. This is the biggest upgrade you can make.</div>
+                    </div>
+                    <div class="upgrade-cost">~PKR 10,000</div>
+                </div>
+            </div>
+            <div class="upgrade-step" data-num="2">
+                <div class="upgrade-item">
+                    <div class="upgrade-item-left">
+                        <div class="upgrade-part">⚠️ PSU Check: Upgrade to 500W+ if you haven't already</div>
+                        <div class="upgrade-reason">The RX 580 needs more power. <strong>Don't skip this</strong> — a weak PSU will cause crashes and could damage your GPU.</div>
+                    </div>
+                    <div class="upgrade-cost">~PKR 4,000</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 50k → 60k -->
+    <div class="path-section">
+        <div class="path-header">
+            <div class="path-from">50k Build</div>
+            <div class="path-arrow">→</div>
+            <div class="path-to">60k Build</div>
+            <div class="path-cost-badge">+~PKR 10,000</div>
+        </div>
+        <div class="upgrade-steps">
+            <div class="upgrade-step" data-num="1">
+                <div class="upgrade-item">
+                    <div class="upgrade-item-left">
+                        <div class="upgrade-part">🧠 CPU: Ryzen 5 2600 → Ryzen 5 3600</div>
+                        <div class="upgrade-reason">At this tier the GPU is no longer the bottleneck for many games. The Ryzen 5 3600 gives you <strong>better IPC, faster gaming, and smoother streaming</strong>. It's a drop-in upgrade on most A320/B350 boards.</div>
+                    </div>
+                    <div class="upgrade-cost">~PKR 7,000</div>
+                </div>
+            </div>
+            <div class="upgrade-step" data-num="2">
+                <div class="upgrade-item">
+                    <div class="upgrade-item-left">
+                        <div class="upgrade-part">🔋 RAM: 8GB → 16GB DDR4 3200MHz</div>
+                        <div class="upgrade-reason">16GB lets you game and stream simultaneously. Also <strong>Ryzen CPUs love fast RAM</strong> — 3200MHz gives a noticeable boost over 2400MHz.</div>
+                    </div>
+                    <div class="upgrade-cost">~PKR 5,000</div>
+                </div>
+            </div>
+            <div class="upgrade-step" data-num="3">
+                <div class="upgrade-item">
+                    <div class="upgrade-item-left">
+                        <div class="upgrade-part">🎮 GPU: RX 580 → GTX 1650 Super (optional)</div>
+                        <div class="upgrade-reason">Only do this if you're playing at 1440p or want better performance in demanding titles like Warzone or PUBG. At 1080p the <strong>RX 580 is still excellent</strong>.</div>
+                    </div>
+                    <div class="upgrade-cost">~PKR 8,000</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <div class="rule-box" style="border-color: var(--primary-neon); background: rgba(0,255,204,0.04);">
+        <strong style="color: var(--primary-neon);">💡 Final Tip: Buy Smart on OLX</strong>
+        When upgrading, sell your old part on OLX before buying the new one. An i5-3470 can sell for PKR 3,500–4,500, and an RX 460 can fetch PKR 8,000–10,000. This reduces your upgrade cost significantly and keeps your budget in check.
+    </div>
+</main>
+
+<footer style="background: #0d1117; border-top: 1px solid #30363d; padding: 40px 20px; text-align: center; margin-top: 20px; position: relative; z-index: 1;">
+    <p style="color: var(--primary-neon); font-weight: 600;">GAMING BUDGET HUB</p>
+    <p style="color: #8b949e; font-size: 0.9rem;">Your guide to budget gaming in Pakistan.</p>
+    <div style="margin-top: 15px;">
+        <a href="#" style="color: #fff; margin: 0 10px; text-decoration: none;">Discord</a>
+        <a href="#" style="color: #fff; margin: 0 10px; text-decoration: none;">YouTube</a>
+        <a href="#" style="color: #fff; margin: 0 10px; text-decoration: none;">Instagram</a>
+    </div>
+    <p style="color: #484f58; font-size: 0.8rem; margin-top: 20px;">&copy; 2026 Gaming Budget Hub. All rights reserved.</p>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>

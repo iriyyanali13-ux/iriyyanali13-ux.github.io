@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Best budget PC builds and FPS guides for gamers in Pakistan.">
+    <meta property="og:title" content="Gaming Budget Hub">
+    <meta property="og:description" content="Level up your setup without breaking the bank.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1542751371-adc38448a05e">
+    <title>FPS Guides | Gaming Budget Hub</title>
+    <style>
+        html { scroll-behavior: smooth; }
+        :root { --primary-neon: #00ffcc; --bg-deep: #0b0e14; --card-bg: #161b22; }
+        
+        body.light-mode { --bg-deep: #ffffff; --card-bg: #f9f9f9; color: #222; }
+        body.light-mode th { background: #eee; color: #111; }
+        body.light-mode td { border-bottom: 1px solid #ddd; color: #222; }
+        body.light-mode .chart-box, body.light-mode .header { background: #fff; border-color: #ccc; }
+        body.light-mode .nav a { color: #333; }
+        body.light-mode .game-btn { background: #eee; color: #333; border-color: #ccc; }
+        body.light-mode .game-btn.active { background: var(--primary-neon); color: #0b0e14; }
+
+        body { background-color: var(--bg-deep); color: #e6edf3; font-family: 'Segoe UI', sans-serif; margin: 0; transition: 0.3s; }
+        .header { background: rgba(13, 17, 23, 0.95); border-bottom: 2px solid var(--primary-neon); display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; position: sticky; top: 0; z-index: 2000; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary-neon); text-transform: uppercase; }
+        .nav { display: flex; align-items: center; }
+        .nav a { color: #fff; text-decoration: none; margin-left: 20px; font-weight: 500; transition: 0.3s; }
+        .nav a:hover { color: var(--primary-neon); }
+        .nav a.active { color: var(--primary-neon); border-bottom: 2px solid var(--primary-neon); padding-bottom: 5px; }
+        
+        .mobile-menu { display: none; font-size: 2rem; color: var(--primary-neon); cursor: pointer; }
+        @media (max-width: 768px) {
+            .mobile-menu { display: block; }
+            .nav { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background: var(--bg-deep); border-bottom: 2px solid var(--primary-neon); padding: 20px 0; z-index: 9999; }
+            .nav.active { display: flex !important; }
+            .nav a { margin: 15px 0; font-size: 1.3rem; }
+        }
+        
+        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+
+        /* ── CHART BOX ── */
+        .chart-box { background: var(--card-bg); border-radius: 12px; border: 1px solid #30363d; padding: 24px; text-align: center; margin-bottom: 30px; transition: 0.3s; }
+        .chart-box:hover { border-color: var(--primary-neon); box-shadow: 0 0 15px rgba(0, 255, 204, 0.2); }
+        .chart-box h3 { color: #e6edf3; margin-bottom: 16px; font-size: 1rem; }
+        .chart-box h3 span { color: var(--primary-neon); }
+        .chart-container { position: relative; height: 300px; width: 100%; max-width: 400px; margin: 0 auto; }
+
+        /* ── GAME SWITCHER BUTTONS ── */
+        .game-switcher {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .game-btn {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            color: #8b949e;
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.82rem;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .game-btn:hover { border-color: var(--primary-neon); color: var(--primary-neon); }
+        .game-btn.active {
+            background: var(--primary-neon);
+            color: #0b0e14;
+            border-color: var(--primary-neon);
+            font-weight: 700;
+        }
+
+        /* ── TABLE ── */
+        .table-wrap { overflow-x: auto; background: var(--card-bg); border-radius: 12px; border: 1px solid #30363d; transition: 0.3s; }
+        .table-wrap:hover { border-color: var(--primary-neon); box-shadow: 0 0 15px rgba(0, 255, 204, 0.2); }
+        table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        th { background: #21262d; color: var(--primary-neon); padding: 14px 15px; text-align: left; font-size: 0.88rem; white-space: nowrap; }
+        td { padding: 13px 15px; border-bottom: 1px solid #30363d; font-size: 0.9rem; white-space: nowrap; }
+        td:first-child { font-weight: 700; color: var(--primary-neon); }
+
+        /* color-code FPS cells */
+        .fps-low    { color: #ff4d4d; }
+        .fps-medium { color: #ffdb4d; }
+        .fps-high   { color: #00ffcc; }
+        .fps-ultra  { color: #9d7bff; font-weight: 700; }
+
+        .theme-btn { background: none; border: 1px solid var(--primary-neon); color: var(--primary-neon); cursor: pointer; padding: 5px 12px; border-radius: 5px; }
+
+        .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 14px; justify-content: center; font-size: 0.78rem; color: #8b949e; }
+        .legend span { display: flex; align-items: center; gap: 5px; }
+        .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="logo">Gaming Budget Hub</div>
+    <div class="mobile-menu" id="mobile-menu">☰</div>
+    <nav class="nav" id="nav-menu">
+        <a href="index.html">🏠 Home</a>
+        <a href="builds.html">🖥️ PC Builds</a>
+        <a href="fps-guides.html" class="active">📊 FPS Guides</a>
+        <a href="fps-counter.html">⚡ FPS Counter</a>
+        <a href="quiz.html">🎯 Build Quiz</a>
+        <a href="faq.html">❓ FAQ</a>
+        <a href="upgrade-guide.html">📈 Upgrade Guide</a>
+        <a href="contact.html">📩 Contact Us</a>
+    </nav>
+    <button id="theme-toggle" class="theme-btn">🌙</button>
+</header>
+
+<main class="container">
+    <h2 style="color: var(--primary-neon); margin-bottom: 6px;">FPS Performance Breakdown</h2>
+    <p style="color: #8b949e; margin-bottom: 28px; font-size: 0.9rem;">Estimated FPS per build at recommended settings. Click a game to update the chart.</p>
+
+    <!-- Chart with game switcher -->
+    <div class="chart-box">
+        <h3>Performance Distribution — <span id="chartGameLabel">Valorant</span></h3>
+
+        <div class="game-switcher">
+            <button class="game-btn active" data-game="valorant">Valorant</button>
+            <button class="game-btn" data-game="cs2">CS2</button>
+            <button class="game-btn" data-game="pubg">PUBG</button>
+            <button class="game-btn" data-game="fortnite">Fortnite</button>
+            <button class="game-btn" data-game="freefile">Free Fire</button>
+            <button class="game-btn" data-game="warzone">Warzone</button>
+            <button class="game-btn" data-game="gta5">GTA 5</button>
+            <button class="game-btn" data-game="minecraft">Minecraft</button>
+            <button class="game-btn" data-game="roblox">Roblox</button>
+            <button class="game-btn" data-game="dota2">Dota 2</button>
+            <button class="game-btn" data-game="rocketleague">Rocket League</button>
+            <button class="game-btn" data-game="fc24">FC 24</button>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="fpsPieChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Full FPS table -->
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Build</th>
+                    <th>Valorant</th>
+                    <th>CS2</th>
+                    <th>PUBG</th>
+                    <th>Fortnite</th>
+                    <th>Free Fire</th>
+                    <th>Warzone</th>
+                    <th>GTA 5</th>
+                    <th>Minecraft</th>
+                    <th>Roblox</th>
+                    <th>Dota 2</th>
+                    <th>Rocket League</th>
+                    <th>FC 24</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>20k</td>
+                    <td class="fps-medium">45</td>
+                    <td class="fps-medium">40</td>
+                    <td class="fps-low">20</td>
+                    <td class="fps-low">30</td>
+                    <td class="fps-high">60</td>
+                    <td class="fps-low">18</td>
+                    <td class="fps-low">25</td>
+                    <td class="fps-high">60</td>
+                    <td class="fps-high">60</td>
+                    <td class="fps-low">35</td>
+                    <td class="fps-medium">40</td>
+                    <td class="fps-low">35</td>
+                </tr>
+                <tr>
+                    <td>30k</td>
+                    <td class="fps-high">90</td>
+                    <td class="fps-medium">80</td>
+                    <td class="fps-medium">40</td>
+                    <td class="fps-high">60</td>
+                    <td class="fps-high">90</td>
+                    <td class="fps-low">35</td>
+                    <td class="fps-medium">45</td>
+                    <td class="fps-high">110</td>
+                    <td class="fps-medium">80</td>
+                    <td class="fps-medium">65</td>
+                    <td class="fps-medium">75</td>
+                    <td class="fps-high">60</td>
+                </tr>
+                <tr>
+                    <td>40k</td>
+                    <td class="fps-ultra">144</td>
+                    <td class="fps-ultra">130</td>
+                    <td class="fps-high">60</td>
+                    <td class="fps-high">90</td>
+                    <td class="fps-ultra">120</td>
+                    <td class="fps-medium">55</td>
+                    <td class="fps-high">60</td>
+                    <td class="fps-ultra">200</td>
+                    <td class="fps-ultra">120</td>
+                    <td class="fps-high">90</td>
+                    <td class="fps-ultra">120</td>
+                    <td class="fps-high">90</td>
+                </tr>
+                <tr>
+                    <td>50k</td>
+                    <td class="fps-ultra">220</td>
+                    <td class="fps-ultra">200</td>
+                    <td class="fps-high">90</td>
+                    <td class="fps-ultra">140</td>
+                    <td class="fps-ultra">144</td>
+                    <td class="fps-medium">80</td>
+                    <td class="fps-medium">85</td>
+                    <td class="fps-ultra">350</td>
+                    <td class="fps-ultra">144</td>
+                    <td class="fps-ultra">140</td>
+                    <td class="fps-ultra">180</td>
+                    <td class="fps-ultra">120</td>
+                </tr>
+                <tr>
+                    <td>60k</td>
+                    <td class="fps-ultra">280</td>
+                    <td class="fps-ultra">260</td>
+                    <td class="fps-ultra">120</td>
+                    <td class="fps-ultra">180</td>
+                    <td class="fps-ultra">144</td>
+                    <td class="fps-high">110</td>
+                    <td class="fps-high">110</td>
+                    <td class="fps-ultra">500</td>
+                    <td class="fps-ultra">144</td>
+                    <td class="fps-ultra">180</td>
+                    <td class="fps-ultra">240</td>
+                    <td class="fps-ultra">144</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Legend -->
+    <div class="legend">
+        <span><span class="dot" style="background:#ff4d4d"></span> &lt;40 FPS — Struggling</span>
+        <span><span class="dot" style="background:#ffdb4d"></span> 40–79 FPS — Playable</span>
+        <span><span class="dot" style="background:#00ffcc"></span> 80–144 FPS — Smooth</span>
+        <span><span class="dot" style="background:#9d7bff"></span> 144+ FPS — Ultra Smooth</span>
+    </div>
+</main>
+
+<footer style="background: #0d1117; border-top: 1px solid #30363d; padding: 40px 20px; text-align: center; margin-top: 50px;">
+    <p style="color: var(--primary-neon); font-weight: 600;">GAMING BUDGET HUB</p>
+    <p style="color: #8b949e; font-size: 0.9rem;">Your guide to budget gaming in Pakistan.</p>
+    <div style="margin-top: 15px;">
+        <a href="#" style="color: #fff; margin: 0 10px; text-decoration: none;">Discord</a>
+        <a href="#" style="color: #fff; margin: 0 10px; text-decoration: none;">YouTube</a>
+        <a href="#" style="color: #fff; margin: 0 10px; text-decoration: none;">Instagram</a>
+    </div>
+    <p style="color: #484f58; font-size: 0.8rem; margin-top: 20px;">&copy; 2026 Gaming Budget Hub. All rights reserved.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="main.js"></script>
+<script>
+// All FPS data per game per build
+const allFpsData = {
+    valorant:    { label: 'Valorant',     data: [45, 90, 144, 220, 280] },
+    cs2:         { label: 'CS2',          data: [40, 80, 130, 200, 260] },
+    pubg:        { label: 'PUBG',         data: [20, 40, 60,  90,  120] },
+    fortnite:    { label: 'Fortnite',     data: [30, 60, 90,  140, 180] },
+    freefile:    { label: 'Free Fire',    data: [60, 90, 120, 144, 144] },
+    warzone:     { label: 'Warzone',      data: [18, 35, 55,  80,  110] },
+    gta5:        { label: 'GTA 5',        data: [25, 45, 60,  85,  110] },
+    minecraft:   { label: 'Minecraft',    data: [60, 110, 200, 350, 500] },
+    roblox:      { label: 'Roblox',       data: [60, 80, 120, 144, 144] },
+    dota2:       { label: 'Dota 2',       data: [35, 65, 90,  140, 180] },
+    rocketleague:{ label: 'Rocket League',data: [40, 75, 120, 180, 240] },
+    fc24:        { label: 'FC 24',        data: [35, 60, 90,  120, 144] },
+};
+
+const COLORS = ['#ff4d4d', '#ffdb4d', '#00ffcc', '#36a2eb', '#9966ff'];
+const BUILDS = ['20k Build', '30k Build', '40k Build', '50k Build', '60k Build'];
+
+// Build the chart
+const ctx = document.getElementById('fpsPieChart').getContext('2d');
+const chart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: BUILDS,
+        datasets: [{
+            label: 'FPS',
+            data: allFpsData.valorant.data,
+            backgroundColor: COLORS,
+            borderColor: '#161b22',
+            borderWidth: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: { color: '#8b949e', font: { family: "'Segoe UI', sans-serif" } }
+            },
+            tooltip: {
+                callbacks: {
+                    label: (ctx) => ` ${ctx.label}: ${ctx.raw}+ FPS`
+                }
+            }
+        }
+    }
+});
+
+// Game switcher logic
+document.querySelectorAll('.game-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.game-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const game = btn.dataset.game;
+        const gameData = allFpsData[game];
+
+        // Update chart data with animation
+        chart.data.datasets[0].data = gameData.data;
+        chart.update();
+
+        // Update title label
+        document.getElementById('chartGameLabel').textContent = gameData.label;
+    });
+});
+</script>
+</body>
+</html>
